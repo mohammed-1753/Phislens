@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<main class="page">
+    <section class="hero">
+        <div class="hero-badge">Phishing Detection Tool</div>
+        <h1>PhishLens</h1>
+        <p class="hero-text">
+            Analyze suspicious URLs or email content for phishing signals,
+            risky keywords, obfuscation, and domain-age clues.
+        </p>
+    </section>
+
+    <section class="card input-card">
+        <form method="POST" id="analysisForm">
+            <label for="input_type" class="label">Select analysis type</label>
+            <select id="input_type" name="input_type" class="select-box" onchange="toggleInputSections()">
+                <option value="url" {% if selected_type=='url' %}selected{% endif %}>URL Analysis</option>
+                <option value="email" {% if selected_type=='email' %}selected{% endif %}>Email Analysis</option>
+            </select>
+
+            <div id="url-section" class="input-section">
+                <label for="url_input" class="label">Suspicious URL</label>
+                <textarea id="url_input" name="url_input" rows="6"
+                    placeholder="Paste a suspicious URL here...">{% if selected_type == 'url' and submitted_input %}{{ submitted_input }}{% endif %}</textarea>
+            </div>
+
+            <div id="email-section" class="input-section">
+                <label for="email_input" class="label">Email content</label>
+                <textarea id="email_input" name="email_input" rows="12"
+                    placeholder="Paste full email content here...">{% if selected_type == 'email' and submitted_input %}{{ submitted_input }}{% endif %}</textarea>
+
+                <label for="email_image_text" class="label">Optional image text</label>
+                <textarea id="email_image_text" name="email_image_text" rows="5"
+                    placeholder="Paste OCR or image text...">{% if email_image_text %}{{ email_image_text }}{% endif %}</textarea>
+            </div>
+
+            <div class="button-row">
+                <button type="submit" class="analyze-btn">Analyze</button>
+                <button type="button" class="reset-btn" onclick="resetForm()">Reset</button>
+            </div>
+        </form>
+    </section>
+
+    {% if result %}
+    <section class="results-grid">
+        <article class="card score-card">
+            <div class="score-top">
+                <p class="label-sm">Risk score</p>
+                <span
+                    class="badge {% if result.verdict == 'High Risk' %}badge-danger{% elif result.verdict == 'Medium Risk' %}badge-warning{% else %}badge-safe{% endif %}">
+                    {{ result.verdict }}
+                </span>
+            </div>
+
+            <div class="score-number">
+                {{ result.risk_score }}<span>/100</span>
+            </div>
+        </article>
+
+        <article class="card explanation-card">
+            <h2>Why this was flagged</h2>
+            <ul class="reason-list">
+                {% for reason in result.reasons %}
+                <li>{{ reason }}</li>
+                {% endfor %}
+            </ul>
+        </article>
+    </section>
+    {% endif %}
+</main>
+
+<script>
+    function toggleInputSections() {
+        const type = document.getElementById("input_type").value;
+        document.getElementById("url-section").style.display = type === "url" ? "block" : "none";
+        document.getElementById("email-section").style.display = type === "email" ? "block" : "none";
+    }
+
+    function resetForm() {
+        document.getElementById("analysisForm").reset();
+        toggleInputSections();
+    }
+
+    window.addEventListener("DOMContentLoaded", toggleInputSections);
+</script>
+
+{% endblock %}
