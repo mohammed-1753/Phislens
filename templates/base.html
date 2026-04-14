@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishLens</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR-ID"
+        crossorigin="anonymous"></script>
+</head>
+
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
+    <div style="flex: 1;">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer style="text-align: center; padding: 20px; margin-top: 2rem;">
+        <p>&copy; made by Mohammed Abbas</p>
+        <div style="margin-top: 10px; font-size: 0.9rem;">
+            <a href="{{ url_for('home') }}"
+                style="margin: 0 10px; color: inherit; text-decoration: none; opacity: 0.8;">Home</a>
+            <a href="{{ url_for('about') }}"
+                style="margin: 0 10px; color: inherit; text-decoration: none; opacity: 0.8;">About</a>
+            <a href="{{ url_for('contact') }}"
+                style="margin: 0 10px; color: inherit; text-decoration: none; opacity: 0.8;">Contact</a>
+            <a href="{{ url_for('privacy_policy') }}"
+                style="margin: 0 10px; color: inherit; text-decoration: none; opacity: 0.8;">Privacy Policy</a>
+        </div>
+    </footer>
+</body>
+
+</html>
